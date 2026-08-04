@@ -15,105 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Patch the existing full index.html
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
-          marker = '/* FULL GAME VISUAL FIX V4 */'
-          css = r'''
-
-/* FULL GAME VISUAL FIX V4 */
-:root{
-  --void:#15100d!important;
-  --void2:#211712!important;
-  --felt:#17513b!important;
-  --felt-lo:#0d3427!important;
-  --rail:#602c38!important;
-  --rail-hi:#8a4657!important;
-  --gold:#e3bd5c!important;
-  --gold-hi:#ffe6a0!important;
-  --brass:#b58b3d!important;
-  --blood:#c52c39!important;
-  --blood-hi:#ff6672!important;
-  --ivory:#fff7e6!important;
-  --txt:#fff6e7!important;
-  --txt-dim:#d2c3aa!important;
-  --glass:rgba(27,20,16,.90)!important;
-  --glass-line:rgba(255,214,119,.46)!important;
-}
-html,body,#game{background-color:#15100d!important;color:#fff6e7!important;color-scheme:dark!important}
-#game{
-  opacity:1!important;filter:none!important;
-  background:
-    radial-gradient(125% 64% at 50% -6%,rgba(110,35,56,.62) 0%,transparent 57%),
-    radial-gradient(135% 82% at 50% 115%,rgba(20,91,66,.42) 0%,transparent 62%),
-    #15100d!important;
-}
-#tableWrap,#table,.felt,.topbar,#heroArea,#actions{filter:none!important;opacity:1!important}
-.felt{
-  background:
-    radial-gradient(80% 64% at 50% 32%,rgba(255,245,205,.17),transparent 62%),
-    radial-gradient(120% 120% at 50% 50%,#17513b 0%,#0d3427 80%)!important;
-  border-color:#602c38!important;
-  box-shadow:inset 0 0 38px rgba(0,0,0,.48),0 0 0 2px #b58b3d,0 0 0 4px rgba(0,0,0,.55),0 18px 38px rgba(0,0,0,.52)!important;
-}
-.felt::before{border-color:rgba(255,222,132,.32)!important}
-.felt::after{color:rgba(255,222,132,.24)!important}
-.tb-pill,.iconbtn,.seat .plate,#potBox{
-  background:rgba(29,21,17,.94)!important;
-  border-color:rgba(255,214,119,.48)!important;
-  box-shadow:0 3px 10px rgba(0,0,0,.35)!important;
-}
-.tb-pill,.tb-pill .lbl,.iconbtn,.seat .nm{color:#d8cbb5!important}
-.tb-pill b,.seat .stk,#potAmt,#heroStack{color:#ffe6a0!important}
-.seat .av{border-color:#c89b48!important;filter:saturate(1.18) brightness(1.08)!important}
-.seat.active .av{border-color:#ffe6a0!important;box-shadow:0 0 22px rgba(255,214,119,.72),0 4px 10px rgba(0,0,0,.55)!important}
-.card,.mini-card.up{background:#fff7e6!important;filter:none!important}
-.mini-card.back{filter:saturate(1.3) brightness(1.18)!important;border-color:#c89b48!important}
-#heroRank{color:#69d8ae!important}
-#actions{background:linear-gradient(180deg,rgba(21,16,13,0),rgba(21,16,13,.94) 24%)!important}
-#actRow{opacity:.72!important}
-#actRow.live{opacity:1!important}
-.abtn{min-height:58px!important;font-size:14px!important;font-weight:900!important;text-shadow:none!important;filter:none!important}
-#btnCheck,.abtn.checkcall{
-  flex:1.12!important;
-  color:#241707!important;
-  background:linear-gradient(180deg,#fff0b5 0%,#e3bd5c 55%,#b7862e 100%)!important;
-  border:2px solid #ffe6a0!important;
-  box-shadow:0 4px 14px rgba(227,189,92,.48)!important;
-}
-#btnRaise,.abtn.raise{
-  flex:1.12!important;
-  color:#fff!important;
-  background:linear-gradient(180deg,#ff6672 0%,#c52c39 55%,#8d1722 100%)!important;
-  border:2px solid #ff8992!important;
-  box-shadow:0 4px 14px rgba(197,44,57,.52)!important;
-}
-#btnFold,.abtn.fold{color:#fff0e2!important;background:linear-gradient(180deg,#403128,#261d18)!important;border:1px solid #846b58!important}
-#btnAllin,.abtn.allin-btn{color:#ff9aa2!important;background:linear-gradient(180deg,#531820,#2f0d12)!important;border:1px solid #e64652!important}
-.abtn[disabled]{opacity:.70!important;filter:none!important;color:inherit!important}
-#actRow.live .abtn:not([disabled]){opacity:1!important;filter:none!important}
-@media(max-width:520px){
-  #btnCheck,#btnRaise{min-height:61px!important;font-size:15px!important}
-  .abtn{min-height:55px!important;font-size:13px!important}
-  #actRow{gap:7px!important}
-}
-'''
-          if marker not in s:
-              s = s.replace('\n</style>', css + '\n</style>', 1)
-          else:
-              start = s.index(marker) - 2
-              end = s.index('\n</style>', start)
-              s = s[:start] + css + s[end:]
-          p.write_text(s, encoding='utf-8')
-          PY
-      - name: Commit patched full game
+      - name: Patch existing full index
+        shell: bash
+        run: python -c "import base64,pathlib; p=pathlib.Path('index.html'); s=p.read_text(encoding='utf-8'); css=base64.b64decode('Ci8qIEZVTEwgR0FNRSBWSVNVQUwgRklYIFY2ICovCjpyb290ey0tdm9pZDojMTgxMTBkIWltcG9ydGFudDstLXZvaWQyOiMyNDE4MTIhaW1wb3J0YW50Oy0tZmVsdDojMWM1ZDQzIWltcG9ydGFudDstLWZlbHQtbG86IzBmMzkyYSFpbXBvcnRhbnQ7LS1yYWlsOiM2ZjM0NDIhaW1wb3J0YW50Oy0tcmFpbC1oaTojOTY1MjY1IWltcG9ydGFudDstLWdvbGQ6I2U4YzM1ZiFpbXBvcnRhbnQ7LS1nb2xkLWhpOiNmZmU5YTghaW1wb3J0YW50Oy0tYnJhc3M6I2JkOTE0MyFpbXBvcnRhbnQ7LS1ibG9vZDojY2YzNDQyIWltcG9ydGFudDstLWJsb29kLWhpOiNmZjZkNzkhaW1wb3J0YW50Oy0taXZvcnk6I2ZmZjhlOCFpbXBvcnRhbnQ7LS10eHQ6I2ZmZjdlOSFpbXBvcnRhbnQ7LS10eHQtZGltOiNkNmM4YjIhaW1wb3J0YW50Oy0tZ2xhc3M6cmdiYSgzMSwyMiwxNywuOTIpIWltcG9ydGFudDstLWdsYXNzLWxpbmU6cmdiYSgyNTUsMjE4LDEyNywuNTApIWltcG9ydGFudH0KaHRtbCxib2R5LCNnYW1le2JhY2tncm91bmQ6IzE4MTEwZCFpbXBvcnRhbnQ7Y29sb3I6I2ZmZjdlOSFpbXBvcnRhbnQ7Y29sb3Itc2NoZW1lOmRhcmshaW1wb3J0YW50fQojZ2FtZXtvcGFjaXR5OjEhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudDtiYWNrZ3JvdW5kOnJhZGlhbC1ncmFkaWVudCgxMjUlIDYyJSBhdCA1MCUgLTUlLHJnYmEoMTI1LDQyLDY0LC42NCksdHJhbnNwYXJlbnQgNTglKSxyYWRpYWwtZ3JhZGllbnQoMTM1JSA4MiUgYXQgNTAlIDExNCUscmdiYSgyNCwxMDEsNzQsLjQ2KSx0cmFuc3BhcmVudCA2MyUpLCMxODExMGQhaW1wb3J0YW50fQojdGFibGVXcmFwLCN0YWJsZSwuZmVsdCwudG9wYmFyLCNoZXJvQXJlYSwjYWN0aW9uc3tvcGFjaXR5OjEhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudH0KLmZlbHR7YmFja2dyb3VuZDpyYWRpYWwtZ3JhZGllbnQoODAlIDYyJSBhdCA1MCUgMzElLHJnYmEoMjU1LDI0NiwyMDgsLjE4KSx0cmFuc3BhcmVudCA2MiUpLHJhZGlhbC1ncmFkaWVudCgxMjAlIDEyMCUgYXQgNTAlIDUwJSwjMWM1ZDQzIDAlLCMwZjM5MmEgODAlKSFpbXBvcnRhbnQ7Ym9yZGVyLWNvbG9yOiM2ZjM0NDIhaW1wb3J0YW50O2JveC1zaGFkb3c6aW5zZXQgMCAwIDM0cHggcmdiYSgwLDAsMCwuNDQpLDAgMCAwIDJweCAjYmQ5MTQzLDAgMCAwIDRweCByZ2JhKDAsMCwwLC41MiksMCAxOHB4IDM2cHggcmdiYSgwLDAsMCwuNTApIWltcG9ydGFudH0KLmZlbHQ6OmJlZm9yZXtib3JkZXItY29sb3I6cmdiYSgyNTUsMjI1LDE0MSwuMzYpIWltcG9ydGFudH0uZmVsdDo6YWZ0ZXJ7Y29sb3I6cmdiYSgyNTUsMjI1LDE0MSwuMjUpIWltcG9ydGFudH0KLnRiLXBpbGwsLmljb25idG4sLnNlYXQgLnBsYXRlLCNwb3RCb3h7YmFja2dyb3VuZDpyZ2JhKDMxLDIyLDE3LC45NSkhaW1wb3J0YW50O2JvcmRlci1jb2xvcjpyZ2JhKDI1NSwyMTgsMTI3LC41MCkhaW1wb3J0YW50O2JveC1zaGFkb3c6MCAzcHggMTBweCByZ2JhKDAsMCwwLC4zNCkhaW1wb3J0YW50fQoudGItcGlsbCwudGItcGlsbCAubGJsLC5pY29uYnRuLC5zZWF0IC5ubXtjb2xvcjojZGVkMGJhIWltcG9ydGFudH0udGItcGlsbCBiLC5zZWF0IC5zdGssI3BvdEFtdCwjaGVyb1N0YWNre2NvbG9yOiNmZmU5YTghaW1wb3J0YW50fQouc2VhdCAuYXZ7Ym9yZGVyLWNvbG9yOiNjZmEwNGUhaW1wb3J0YW50O2ZpbHRlcjpzYXR1cmF0ZSgxLjIpIGJyaWdodG5lc3MoMS4xKSFpbXBvcnRhbnR9LnNlYXQuYWN0aXZlIC5hdntib3JkZXItY29sb3I6I2ZmZTlhOCFpbXBvcnRhbnQ7Ym94LXNoYWRvdzowIDAgMjJweCByZ2JhKDI1NSwyMTgsMTI3LC43NCksMCA0cHggMTBweCByZ2JhKDAsMCwwLC41NCkhaW1wb3J0YW50fQouY2FyZCwubWluaS1jYXJkLnVwe2JhY2tncm91bmQ6I2ZmZjhlOCFpbXBvcnRhbnQ7ZmlsdGVyOm5vbmUhaW1wb3J0YW50fS5taW5pLWNhcmQuYmFja3tmaWx0ZXI6c2F0dXJhdGUoMS4zNSkgYnJpZ2h0bmVzcygxLjIpIWltcG9ydGFudDtib3JkZXItY29sb3I6I2NmYTA0ZSFpbXBvcnRhbnR9CiNoZXJvUmFua3tjb2xvcjojNzNlMGI3IWltcG9ydGFudH0KI2FjdGlvbnN7YmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoMTgwZGVnLHJnYmEoMjQsMTcsMTMsMCkscmdiYSgyNCwxNywxMywuOTYpIDI0JSkhaW1wb3J0YW50fQojYWN0Um93e29wYWNpdHk6Ljc2IWltcG9ydGFudH0jYWN0Um93LmxpdmV7b3BhY2l0eToxIWltcG9ydGFudH0KLmFidG57bWluLWhlaWdodDo1OXB4IWltcG9ydGFudDtmb250LXNpemU6MTRweCFpbXBvcnRhbnQ7Zm9udC13ZWlnaHQ6OTAwIWltcG9ydGFudDt0ZXh0LXNoYWRvdzpub25lIWltcG9ydGFudDtmaWx0ZXI6bm9uZSFpbXBvcnRhbnR9CiNidG5DaGVjaywuYWJ0bi5jaGVja2NhbGx7ZmxleDoxLjE0IWltcG9ydGFudDtjb2xvcjojMjQxNzA3IWltcG9ydGFudDtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxODBkZWcsI2ZmZjNiZCAwJSwjZThjMzVmIDU1JSwjYjk4YjMxIDEwMCUpIWltcG9ydGFudDtib3JkZXI6MnB4IHNvbGlkICNmZmU5YTghaW1wb3J0YW50O2JveC1zaGFkb3c6MCA0cHggMTVweCByZ2JhKDIzMiwxOTUsOTUsLjUwKSFpbXBvcnRhbnR9CiNidG5SYWlzZSwuYWJ0bi5yYWlzZXtmbGV4OjEuMTQhaW1wb3J0YW50O2NvbG9yOiNmZmYhaW1wb3J0YW50O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE4MGRlZywjZmY2ZDc5IDAlLCNjZjM0NDIgNTUlLCM5NTFiMjcgMTAwJSkhaW1wb3J0YW50O2JvcmRlcjoycHggc29saWQgI2ZmOTQ5ZCFpbXBvcnRhbnQ7Ym94LXNoYWRvdzowIDRweCAxNXB4IHJnYmEoMjA3LDUyLDY2LC41NCkhaW1wb3J0YW50fQojYnRuRm9sZCwuYWJ0bi5mb2xke2NvbG9yOiNmZmYyZTQhaW1wb3J0YW50O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE4MGRlZywjNDkzNzJlLCMyYzIxMWIpIWltcG9ydGFudDtib3JkZXI6MXB4IHNvbGlkICM5MDczNWYhaW1wb3J0YW50fQojYnRuQWxsaW4sLmFidG4uYWxsaW4tYnRue2NvbG9yOiNmZmFiYjEhaW1wb3J0YW50O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE4MGRlZywjNWIxYjIzLCMzNTEwMTUpIWltcG9ydGFudDtib3JkZXI6MXB4IHNvbGlkICNlZDRmNWIhaW1wb3J0YW50fQouYWJ0bltkaXNhYmxlZF17b3BhY2l0eTouNzQhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudDtjb2xvcjppbmhlcml0IWltcG9ydGFudH0KI2FjdFJvdy5saXZlIC5hYnRuOm5vdChbZGlzYWJsZWRdKXtvcGFjaXR5OjEhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudH0KQG1lZGlhKG1heC13aWR0aDo1MjBweCl7I2J0bkNoZWNrLCNidG5SYWlzZXttaW4taGVpZ2h0OjYycHghaW1wb3J0YW50O2ZvbnQtc2l6ZToxNXB4IWltcG9ydGFudH0uYWJ0bnttaW4taGVpZ2h0OjU2cHghaW1wb3J0YW50O2ZvbnQtc2l6ZToxM3B4IWltcG9ydGFudH0jYWN0Um93e2dhcDo3cHghaW1wb3J0YW50fX0K').decode(); marker='/* FULL GAME VISUAL FIX V6 */'; s=s if marker in s else s.replace('</style>',css+'\n</style>',1); p.write_text(s,encoding='utf-8')"
+      - name: Commit visual fix
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
           git diff --cached --quiet && exit 0
-          git commit -m "Brighten full game palette and enlarge action buttons"
+          git commit -m "Apply full game visual fix"
           git push
