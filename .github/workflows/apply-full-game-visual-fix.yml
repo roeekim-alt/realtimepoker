@@ -1,0 +1,119 @@
+name: Apply full game visual fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-full-game-visual-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-existing-full-game:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch the existing full index.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* FULL GAME VISUAL FIX V4 */'
+          css = r'''
+
+/* FULL GAME VISUAL FIX V4 */
+:root{
+  --void:#15100d!important;
+  --void2:#211712!important;
+  --felt:#17513b!important;
+  --felt-lo:#0d3427!important;
+  --rail:#602c38!important;
+  --rail-hi:#8a4657!important;
+  --gold:#e3bd5c!important;
+  --gold-hi:#ffe6a0!important;
+  --brass:#b58b3d!important;
+  --blood:#c52c39!important;
+  --blood-hi:#ff6672!important;
+  --ivory:#fff7e6!important;
+  --txt:#fff6e7!important;
+  --txt-dim:#d2c3aa!important;
+  --glass:rgba(27,20,16,.90)!important;
+  --glass-line:rgba(255,214,119,.46)!important;
+}
+html,body,#game{background-color:#15100d!important;color:#fff6e7!important;color-scheme:dark!important}
+#game{
+  opacity:1!important;filter:none!important;
+  background:
+    radial-gradient(125% 64% at 50% -6%,rgba(110,35,56,.62) 0%,transparent 57%),
+    radial-gradient(135% 82% at 50% 115%,rgba(20,91,66,.42) 0%,transparent 62%),
+    #15100d!important;
+}
+#tableWrap,#table,.felt,.topbar,#heroArea,#actions{filter:none!important;opacity:1!important}
+.felt{
+  background:
+    radial-gradient(80% 64% at 50% 32%,rgba(255,245,205,.17),transparent 62%),
+    radial-gradient(120% 120% at 50% 50%,#17513b 0%,#0d3427 80%)!important;
+  border-color:#602c38!important;
+  box-shadow:inset 0 0 38px rgba(0,0,0,.48),0 0 0 2px #b58b3d,0 0 0 4px rgba(0,0,0,.55),0 18px 38px rgba(0,0,0,.52)!important;
+}
+.felt::before{border-color:rgba(255,222,132,.32)!important}
+.felt::after{color:rgba(255,222,132,.24)!important}
+.tb-pill,.iconbtn,.seat .plate,#potBox{
+  background:rgba(29,21,17,.94)!important;
+  border-color:rgba(255,214,119,.48)!important;
+  box-shadow:0 3px 10px rgba(0,0,0,.35)!important;
+}
+.tb-pill,.tb-pill .lbl,.iconbtn,.seat .nm{color:#d8cbb5!important}
+.tb-pill b,.seat .stk,#potAmt,#heroStack{color:#ffe6a0!important}
+.seat .av{border-color:#c89b48!important;filter:saturate(1.18) brightness(1.08)!important}
+.seat.active .av{border-color:#ffe6a0!important;box-shadow:0 0 22px rgba(255,214,119,.72),0 4px 10px rgba(0,0,0,.55)!important}
+.card,.mini-card.up{background:#fff7e6!important;filter:none!important}
+.mini-card.back{filter:saturate(1.3) brightness(1.18)!important;border-color:#c89b48!important}
+#heroRank{color:#69d8ae!important}
+#actions{background:linear-gradient(180deg,rgba(21,16,13,0),rgba(21,16,13,.94) 24%)!important}
+#actRow{opacity:.72!important}
+#actRow.live{opacity:1!important}
+.abtn{min-height:58px!important;font-size:14px!important;font-weight:900!important;text-shadow:none!important;filter:none!important}
+#btnCheck,.abtn.checkcall{
+  flex:1.12!important;
+  color:#241707!important;
+  background:linear-gradient(180deg,#fff0b5 0%,#e3bd5c 55%,#b7862e 100%)!important;
+  border:2px solid #ffe6a0!important;
+  box-shadow:0 4px 14px rgba(227,189,92,.48)!important;
+}
+#btnRaise,.abtn.raise{
+  flex:1.12!important;
+  color:#fff!important;
+  background:linear-gradient(180deg,#ff6672 0%,#c52c39 55%,#8d1722 100%)!important;
+  border:2px solid #ff8992!important;
+  box-shadow:0 4px 14px rgba(197,44,57,.52)!important;
+}
+#btnFold,.abtn.fold{color:#fff0e2!important;background:linear-gradient(180deg,#403128,#261d18)!important;border:1px solid #846b58!important}
+#btnAllin,.abtn.allin-btn{color:#ff9aa2!important;background:linear-gradient(180deg,#531820,#2f0d12)!important;border:1px solid #e64652!important}
+.abtn[disabled]{opacity:.70!important;filter:none!important;color:inherit!important}
+#actRow.live .abtn:not([disabled]){opacity:1!important;filter:none!important}
+@media(max-width:520px){
+  #btnCheck,#btnRaise{min-height:61px!important;font-size:15px!important}
+  .abtn{min-height:55px!important;font-size:13px!important}
+  #actRow{gap:7px!important}
+}
+'''
+          if marker not in s:
+              s = s.replace('\n</style>', css + '\n</style>', 1)
+          else:
+              start = s.index(marker) - 2
+              end = s.index('\n</style>', start)
+              s = s[:start] + css + s[end:]
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit patched full game
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Brighten full game palette and enlarge action buttons"
+          git push
