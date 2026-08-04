@@ -1,0 +1,70 @@
+name: PR apply full game colors
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/pr-apply-full-game-colors.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-existing-full-game:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Patch existing full index.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          marker='/* FULL GAME VISUAL FIX V5 */'
+          css=r'''
+
+/* FULL GAME VISUAL FIX V5 */
+:root{
+  --void:#18110d!important;--void2:#241812!important;
+  --felt:#1c5d43!important;--felt-lo:#0f392a!important;
+  --rail:#6f3442!important;--rail-hi:#965265!important;
+  --gold:#e8c35f!important;--gold-hi:#ffe9a8!important;--brass:#bd9143!important;
+  --blood:#cf3442!important;--blood-hi:#ff6d79!important;
+  --ivory:#fff8e8!important;--txt:#fff7e9!important;--txt-dim:#d6c8b2!important;
+  --glass:rgba(31,22,17,.92)!important;--glass-line:rgba(255,218,127,.50)!important;
+}
+html,body,#game{background:#18110d!important;color:#fff7e9!important;color-scheme:dark!important}
+#game{opacity:1!important;filter:none!important;background:radial-gradient(125% 62% at 50% -5%,rgba(125,42,64,.64),transparent 58%),radial-gradient(135% 82% at 50% 114%,rgba(24,101,74,.46),transparent 63%),#18110d!important}
+#tableWrap,#table,.felt,.topbar,#heroArea,#actions{opacity:1!important;filter:none!important}
+.felt{background:radial-gradient(80% 62% at 50% 31%,rgba(255,246,208,.18),transparent 62%),radial-gradient(120% 120% at 50% 50%,#1c5d43 0%,#0f392a 80%)!important;border-color:#6f3442!important;box-shadow:inset 0 0 34px rgba(0,0,0,.44),0 0 0 2px #bd9143,0 0 0 4px rgba(0,0,0,.52),0 18px 36px rgba(0,0,0,.50)!important}
+.felt::before{border-color:rgba(255,225,141,.36)!important}.felt::after{color:rgba(255,225,141,.25)!important}
+.tb-pill,.iconbtn,.seat .plate,#potBox{background:rgba(31,22,17,.95)!important;border-color:rgba(255,218,127,.50)!important;box-shadow:0 3px 10px rgba(0,0,0,.34)!important}
+.tb-pill,.tb-pill .lbl,.iconbtn,.seat .nm{color:#ded0ba!important}.tb-pill b,.seat .stk,#potAmt,#heroStack{color:#ffe9a8!important}
+.seat .av{border-color:#cfa04e!important;filter:saturate(1.2) brightness(1.1)!important}.seat.active .av{border-color:#ffe9a8!important;box-shadow:0 0 22px rgba(255,218,127,.74),0 4px 10px rgba(0,0,0,.54)!important}
+.card,.mini-card.up{background:#fff8e8!important;filter:none!important}.mini-card.back{filter:saturate(1.35) brightness(1.2)!important;border-color:#cfa04e!important}
+#heroRank{color:#73e0b7!important}
+#actions{background:linear-gradient(180deg,rgba(24,17,13,0),rgba(24,17,13,.96) 24%)!important}
+#actRow{opacity:.76!important}#actRow.live{opacity:1!important}
+.abtn{min-height:59px!important;font-size:14px!important;font-weight:900!important;text-shadow:none!important;filter:none!important}
+#btnCheck,.abtn.checkcall{flex:1.14!important;color:#241707!important;background:linear-gradient(180deg,#fff3bd 0%,#e8c35f 55%,#b98b31 100%)!important;border:2px solid #ffe9a8!important;box-shadow:0 4px 15px rgba(232,195,95,.50)!important}
+#btnRaise,.abtn.raise{flex:1.14!important;color:#fff!important;background:linear-gradient(180deg,#ff6d79 0%,#cf3442 55%,#951b27 100%)!important;border:2px solid #ff949d!important;box-shadow:0 4px 15px rgba(207,52,66,.54)!important}
+#btnFold,.abtn.fold{color:#fff2e4!important;background:linear-gradient(180deg,#49372e,#2c211b)!important;border:1px solid #90735f!important}
+#btnAllin,.abtn.allin-btn{color:#ffabb1!important;background:linear-gradient(180deg,#5b1b23,#351015)!important;border:1px solid #ed4f5b!important}
+.abtn[disabled]{opacity:.74!important;filter:none!important;color:inherit!important}
+#actRow.live .abtn:not([disabled]){opacity:1!important;filter:none!important}
+@media(max-width:520px){#btnCheck,#btnRaise{min-height:62px!important;font-size:15px!important}.abtn{min-height:56px!important;font-size:13px!important}#actRow{gap:7px!important}}
+'''
+          if marker not in s:
+              s=s.replace('\n</style>',css+'\n</style>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit patched full game
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Patch full game colors in existing index"
+          git push origin HEAD:${{ github.head_ref }}
