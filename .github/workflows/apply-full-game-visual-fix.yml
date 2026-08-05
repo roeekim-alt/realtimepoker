@@ -15,15 +15,82 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Patch existing full index
-        shell: bash
-        run: python -c "import base64,pathlib; p=pathlib.Path('index.html'); s=p.read_text(encoding='utf-8'); css=base64.b64decode('Ci8qIEZVTEwgR0FNRSBWSVNVQUwgRklYIFY2ICovCjpyb290ey0tdm9pZDojMTgxMTBkIWltcG9ydGFudDstLXZvaWQyOiMyNDE4MTIhaW1wb3J0YW50Oy0tZmVsdDojMWM1ZDQzIWltcG9ydGFudDstLWZlbHQtbG86IzBmMzkyYSFpbXBvcnRhbnQ7LS1yYWlsOiM2ZjM0NDIhaW1wb3J0YW50Oy0tcmFpbC1oaTojOTY1MjY1IWltcG9ydGFudDstLWdvbGQ6I2U4YzM1ZiFpbXBvcnRhbnQ7LS1nb2xkLWhpOiNmZmU5YTghaW1wb3J0YW50Oy0tYnJhc3M6I2JkOTE0MyFpbXBvcnRhbnQ7LS1ibG9vZDojY2YzNDQyIWltcG9ydGFudDstLWJsb29kLWhpOiNmZjZkNzkhaW1wb3J0YW50Oy0taXZvcnk6I2ZmZjhlOCFpbXBvcnRhbnQ7LS10eHQ6I2ZmZjdlOSFpbXBvcnRhbnQ7LS10eHQtZGltOiNkNmM4YjIhaW1wb3J0YW50Oy0tZ2xhc3M6cmdiYSgzMSwyMiwxNywuOTIpIWltcG9ydGFudDstLWdsYXNzLWxpbmU6cmdiYSgyNTUsMjE4LDEyNywuNTApIWltcG9ydGFudH0KaHRtbCxib2R5LCNnYW1le2JhY2tncm91bmQ6IzE4MTEwZCFpbXBvcnRhbnQ7Y29sb3I6I2ZmZjdlOSFpbXBvcnRhbnQ7Y29sb3Itc2NoZW1lOmRhcmshaW1wb3J0YW50fQojZ2FtZXtvcGFjaXR5OjEhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudDtiYWNrZ3JvdW5kOnJhZGlhbC1ncmFkaWVudCgxMjUlIDYyJSBhdCA1MCUgLTUlLHJnYmEoMTI1LDQyLDY0LC42NCksdHJhbnNwYXJlbnQgNTglKSxyYWRpYWwtZ3JhZGllbnQoMTM1JSA4MiUgYXQgNTAlIDExNCUscmdiYSgyNCwxMDEsNzQsLjQ2KSx0cmFuc3BhcmVudCA2MyUpLCMxODExMGQhaW1wb3J0YW50fQojdGFibGVXcmFwLCN0YWJsZSwuZmVsdCwudG9wYmFyLCNoZXJvQXJlYSwjYWN0aW9uc3tvcGFjaXR5OjEhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudH0KLmZlbHR7YmFja2dyb3VuZDpyYWRpYWwtZ3JhZGllbnQoODAlIDYyJSBhdCA1MCUgMzElLHJnYmEoMjU1LDI0NiwyMDgsLjE4KSx0cmFuc3BhcmVudCA2MiUpLHJhZGlhbC1ncmFkaWVudCgxMjAlIDEyMCUgYXQgNTAlIDUwJSwjMWM1ZDQzIDAlLCMwZjM5MmEgODAlKSFpbXBvcnRhbnQ7Ym9yZGVyLWNvbG9yOiM2ZjM0NDIhaW1wb3J0YW50O2JveC1zaGFkb3c6aW5zZXQgMCAwIDM0cHggcmdiYSgwLDAsMCwuNDQpLDAgMCAwIDJweCAjYmQ5MTQzLDAgMCAwIDRweCByZ2JhKDAsMCwwLC41MiksMCAxOHB4IDM2cHggcmdiYSgwLDAsMCwuNTApIWltcG9ydGFudH0KLmZlbHQ6OmJlZm9yZXtib3JkZXItY29sb3I6cmdiYSgyNTUsMjI1LDE0MSwuMzYpIWltcG9ydGFudH0uZmVsdDo6YWZ0ZXJ7Y29sb3I6cmdiYSgyNTUsMjI1LDE0MSwuMjUpIWltcG9ydGFudH0KLnRiLXBpbGwsLmljb25idG4sLnNlYXQgLnBsYXRlLCNwb3RCb3h7YmFja2dyb3VuZDpyZ2JhKDMxLDIyLDE3LC45NSkhaW1wb3J0YW50O2JvcmRlci1jb2xvcjpyZ2JhKDI1NSwyMTgsMTI3LC41MCkhaW1wb3J0YW50O2JveC1zaGFkb3c6MCAzcHggMTBweCByZ2JhKDAsMCwwLC4zNCkhaW1wb3J0YW50fQoudGItcGlsbCwudGItcGlsbCAubGJsLC5pY29uYnRuLC5zZWF0IC5ubXtjb2xvcjojZGVkMGJhIWltcG9ydGFudH0udGItcGlsbCBiLC5zZWF0IC5zdGssI3BvdEFtdCwjaGVyb1N0YWNre2NvbG9yOiNmZmU5YTghaW1wb3J0YW50fQouc2VhdCAuYXZ7Ym9yZGVyLWNvbG9yOiNjZmEwNGUhaW1wb3J0YW50O2ZpbHRlcjpzYXR1cmF0ZSgxLjIpIGJyaWdodG5lc3MoMS4xKSFpbXBvcnRhbnR9LnNlYXQuYWN0aXZlIC5hdntib3JkZXItY29sb3I6I2ZmZTlhOCFpbXBvcnRhbnQ7Ym94LXNoYWRvdzowIDAgMjJweCByZ2JhKDI1NSwyMTgsMTI3LC43NCksMCA0cHggMTBweCByZ2JhKDAsMCwwLC41NCkhaW1wb3J0YW50fQouY2FyZCwubWluaS1jYXJkLnVwe2JhY2tncm91bmQ6I2ZmZjhlOCFpbXBvcnRhbnQ7ZmlsdGVyOm5vbmUhaW1wb3J0YW50fS5taW5pLWNhcmQuYmFja3tmaWx0ZXI6c2F0dXJhdGUoMS4zNSkgYnJpZ2h0bmVzcygxLjIpIWltcG9ydGFudDtib3JkZXItY29sb3I6I2NmYTA0ZSFpbXBvcnRhbnR9CiNoZXJvUmFua3tjb2xvcjojNzNlMGI3IWltcG9ydGFudH0KI2FjdGlvbnN7YmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoMTgwZGVnLHJnYmEoMjQsMTcsMTMsMCkscmdiYSgyNCwxNywxMywuOTYpIDI0JSkhaW1wb3J0YW50fQojYWN0Um93e29wYWNpdHk6Ljc2IWltcG9ydGFudH0jYWN0Um93LmxpdmV7b3BhY2l0eToxIWltcG9ydGFudH0KLmFidG57bWluLWhlaWdodDo1OXB4IWltcG9ydGFudDtmb250LXNpemU6MTRweCFpbXBvcnRhbnQ7Zm9udC13ZWlnaHQ6OTAwIWltcG9ydGFudDt0ZXh0LXNoYWRvdzpub25lIWltcG9ydGFudDtmaWx0ZXI6bm9uZSFpbXBvcnRhbnR9CiNidG5DaGVjaywuYWJ0bi5jaGVja2NhbGx7ZmxleDoxLjE0IWltcG9ydGFudDtjb2xvcjojMjQxNzA3IWltcG9ydGFudDtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxODBkZWcsI2ZmZjNiZCAwJSwjZThjMzVmIDU1JSwjYjk4YjMxIDEwMCUpIWltcG9ydGFudDtib3JkZXI6MnB4IHNvbGlkICNmZmU5YTghaW1wb3J0YW50O2JveC1zaGFkb3c6MCA0cHggMTVweCByZ2JhKDIzMiwxOTUsOTUsLjUwKSFpbXBvcnRhbnR9CiNidG5SYWlzZSwuYWJ0bi5yYWlzZXtmbGV4OjEuMTQhaW1wb3J0YW50O2NvbG9yOiNmZmYhaW1wb3J0YW50O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE4MGRlZywjZmY2ZDc5IDAlLCNjZjM0NDIgNTUlLCM5NTFiMjcgMTAwJSkhaW1wb3J0YW50O2JvcmRlcjoycHggc29saWQgI2ZmOTQ5ZCFpbXBvcnRhbnQ7Ym94LXNoYWRvdzowIDRweCAxNXB4IHJnYmEoMjA3LDUyLDY2LC41NCkhaW1wb3J0YW50fQojYnRuRm9sZCwuYWJ0bi5mb2xke2NvbG9yOiNmZmYyZTQhaW1wb3J0YW50O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE4MGRlZywjNDkzNzJlLCMyYzIxMWIpIWltcG9ydGFudDtib3JkZXI6MXB4IHNvbGlkICM5MDczNWYhaW1wb3J0YW50fQojYnRuQWxsaW4sLmFidG4uYWxsaW4tYnRue2NvbG9yOiNmZmFiYjEhaW1wb3J0YW50O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE4MGRlZywjNWIxYjIzLCMzNTEwMTUpIWltcG9ydGFudDtib3JkZXI6MXB4IHNvbGlkICNlZDRmNWIhaW1wb3J0YW50fQouYWJ0bltkaXNhYmxlZF17b3BhY2l0eTouNzQhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudDtjb2xvcjppbmhlcml0IWltcG9ydGFudH0KI2FjdFJvdy5saXZlIC5hYnRuOm5vdChbZGlzYWJsZWRdKXtvcGFjaXR5OjEhaW1wb3J0YW50O2ZpbHRlcjpub25lIWltcG9ydGFudH0KQG1lZGlhKG1heC13aWR0aDo1MjBweCl7I2J0bkNoZWNrLCNidG5SYWlzZXttaW4taGVpZ2h0OjYycHghaW1wb3J0YW50O2ZvbnQtc2l6ZToxNXB4IWltcG9ydGFudH0uYWJ0bnttaW4taGVpZ2h0OjU2cHghaW1wb3J0YW50O2ZvbnQtc2l6ZToxM3B4IWltcG9ydGFudH0jYWN0Um93e2dhcDo3cHghaW1wb3J0YW50fX0K').decode(); marker='/* FULL GAME VISUAL FIX V6 */'; s=s if marker in s else s.replace('</style>',css+'\n</style>',1); p.write_text(s,encoding='utf-8')"
-      - name: Commit visual fix
-        shell: bash
+      - name: Patch complete game colors
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* FULL GAME COLOR FIX V6 */'
+          css = r'''
+
+/* FULL GAME COLOR FIX V6 */
+:root{
+  --void:#120d0a!important;--void2:#21150f!important;
+  --felt:#176044!important;--felt-lo:#0b3828!important;
+  --rail:#713242!important;--rail-hi:#a24f65!important;
+  --gold:#e8bf55!important;--gold-hi:#ffe9a0!important;--brass:#c6973d!important;
+  --blood:#c92f3d!important;--blood-hi:#ff6674!important;
+  --ivory:#fffaf0!important;--ink:#17120e!important;
+  --txt:#fff7e8!important;--txt-dim:#d9cbb4!important;
+  --glass:rgba(30,21,16,.94)!important;--glass-line:rgba(255,218,126,.52)!important;
+}
+html,body,#game{background:#120d0a!important;color:#fff7e8!important;color-scheme:dark!important}
+#game{filter:none!important;opacity:1!important;background:radial-gradient(120% 58% at 50% -5%,rgba(123,40,62,.67),transparent 58%),radial-gradient(135% 80% at 50% 114%,rgba(21,107,76,.50),transparent 64%),#120d0a!important}
+#tableWrap,#table,.felt,.topbar,#heroArea,#actions,#heroCards,.community,.board{filter:none!important;opacity:1!important}
+.felt{background:radial-gradient(78% 60% at 50% 31%,rgba(255,248,211,.21),transparent 62%),radial-gradient(120% 120% at 50% 50%,#176044 0%,#0b3828 82%)!important;border-color:#713242!important;box-shadow:inset 0 0 34px rgba(0,0,0,.40),0 0 0 2px #c6973d,0 0 0 4px rgba(0,0,0,.50),0 20px 40px rgba(0,0,0,.48)!important}
+.felt::before{border-color:rgba(255,226,139,.38)!important}.felt::after{color:rgba(255,226,139,.28)!important}
+.tb-pill,.iconbtn,.seat .plate,#potBox{background:rgba(30,21,16,.96)!important;border-color:rgba(255,218,126,.54)!important;color:#fff7e8!important;filter:none!important}
+.tb-pill .lbl,.seat .nm{color:#ddcfb8!important}.tb-pill b,.seat .stk,#potAmt,#heroStack{color:#ffe9a0!important}
+
+/* Cards: force a proper bright physical-card appearance */
+.card,#heroCards .card,.board-card,.community .card,.mini-card.up{
+  background:linear-gradient(145deg,#ffffff 0%,#fffaf0 72%,#eadfc9 100%)!important;
+  color:#17120e!important;border-color:#d8c8aa!important;
+  filter:none!important;opacity:1!important;mix-blend-mode:normal!important;
+  box-shadow:0 5px 13px rgba(0,0,0,.52),inset 0 0 0 1px rgba(255,255,255,.9)!important;
+}
+.card.red,.card[data-suit="h"],.card[data-suit="d"],.mini-card.up.red{color:#e1283d!important}
+.card.black,.card[data-suit="s"],.card[data-suit="c"],.mini-card.up.black{color:#17120e!important}
+.card svg,.mini-card.up svg,.board-card svg{filter:none!important;opacity:1!important}
+.card.red svg,.card[data-suit="h"] svg,.card[data-suit="d"] svg{fill:#e1283d!important;color:#e1283d!important}
+.card.black svg,.card[data-suit="s"] svg,.card[data-suit="c"] svg{fill:#17120e!important;color:#17120e!important}
+.card .rank,.card .suit,.card .corner,.mini-card.up{font-weight:900!important;text-shadow:none!important}
+.mini-card.back,.card.back{
+  background:repeating-linear-gradient(135deg,#541729 0 5px,#2b1020 5px 10px)!important;
+  border-color:#d1a64e!important;filter:saturate(1.35) brightness(1.22)!important;opacity:1!important;
+  box-shadow:0 3px 8px rgba(0,0,0,.48),inset 0 0 0 1px rgba(255,225,143,.32)!important;
+}
+
+.seat:not(.folded):not(.out),.seat:not(.folded):not(.out) .av,.seat:not(.folded):not(.out) .plate{filter:none!important;opacity:1!important}
+.seat .av{border-color:#d2a54c!important;filter:saturate(1.28) brightness(1.14)!important}
+.seat.active .av{border-color:#ffe9a0!important;box-shadow:0 0 24px rgba(255,221,126,.78),0 4px 11px rgba(0,0,0,.50)!important}
+.bet-chip,.chip,.dealer-btn{filter:saturate(1.3) brightness(1.16)!important;opacity:1!important}
+#heroRank{color:#72e5b7!important;text-shadow:0 1px 5px rgba(0,0,0,.55)!important}
+
+#actions{background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.96) 22%)!important}
+#actRow{opacity:.82!important}#actRow.live{opacity:1!important}
+.abtn{min-height:59px!important;font-size:14px!important;font-weight:900!important;text-shadow:none!important;filter:none!important}
+#btnCheck,.abtn.checkcall{flex:1.15!important;color:#231706!important;background:linear-gradient(180deg,#fff4bd 0%,#e8bf55 56%,#b88629 100%)!important;border:2px solid #ffe9a0!important;box-shadow:0 4px 16px rgba(232,191,85,.55)!important}
+#btnRaise,.abtn.raise{flex:1.15!important;color:#fff!important;background:linear-gradient(180deg,#ff7180 0%,#c92f3d 56%,#901824 100%)!important;border:2px solid #ff9aa3!important;box-shadow:0 4px 16px rgba(201,47,61,.58)!important}
+#btnFold,.abtn.fold{color:#fff2e5!important;background:linear-gradient(180deg,#514036,#2d211b)!important;border:1px solid #9b806a!important}
+#btnAllin,.abtn.allin-btn{color:#ffadb4!important;background:linear-gradient(180deg,#641e28,#371015)!important;border:1px solid #ed5260!important}
+.abtn[disabled]{opacity:.76!important;filter:none!important}.abtn:not([disabled]){opacity:1!important}
+@media(max-width:520px){#btnCheck,#btnRaise{min-height:63px!important;font-size:15px!important}.abtn{min-height:56px!important;font-size:13px!important}#actRow{gap:7px!important}}
+'''
+
+          # Remove prior generated visual patches, then append the single final patch.
+          s = re.sub(r'\n/\* FULL GAME (?:VISUAL|COLOR) FIX V[0-9]+ \*/.*?(?=\n</style>)', '', s, flags=re.S)
+          s = s.replace('\n</style>', css + '\n</style>', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit updated full game
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
           git diff --cached --quiet && exit 0
-          git commit -m "Apply full game visual fix"
+          git commit -m "Fix card colors and full game rendering"
           git push
